@@ -20,6 +20,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * LoadItemsService loads the CSV file and split the SKU Items, prices and offers
+ */
 @Service
 public class LoadItemsServiceImpl implements LoadItemsService {
 
@@ -31,10 +34,10 @@ public class LoadItemsServiceImpl implements LoadItemsService {
     private static final String PRICE_FILE_NAME = "classpath:item-prices.csv";
     private static final String CSV_FILE_SEPARATOR = ",";
 
-    /*
-     * This method loads the CSV file with Item, price and Offer details
+    /**
+     * This method loads the CSV file and generate the Map with Item as key and Item Information as Value
+     * @return Map<String, ItemInfo>
      */
-
     @Override
     public Map<String, ItemInfo> loadPrices() {
 

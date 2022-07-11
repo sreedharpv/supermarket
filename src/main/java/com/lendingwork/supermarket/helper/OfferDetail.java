@@ -13,7 +13,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 /**
- * This class provides offer details like Multi Buy, Buy 1 Get 1
+ * This Enum identifies the offer details and process the offers like Multi Buy, Buy 3 Get 1 etc
  */
 public enum OfferDetail {
 
@@ -72,18 +72,15 @@ public enum OfferDetail {
         } else {
             return NOOFFER;
         }
-        /*return Arrays.stream(OfferDetail.values())
-                .filter(offerDetails -> offerDetails.name().equalsIgnoreCase(offerDetail))
-                .findFirst()
-                .get();*/
     }
 
     public abstract void priceAndOfferCalculation(ItemInfo itemInfo, List<ItemPriceProcessor> itemPriceProcessorLst);
 
+    // Autowiring the services in Enum
     @Component
     public static class PriceOfferCalculatorInjector {
         @Autowired
-        MultiPricedOfferCalculatorService multiPricedPriceOfferCalculator;
+        MultiPricedOfferCalculatorService multiPricedPriceOfferCalculatorService;
 
         @Autowired
         BuyNGet1FreeOfferCalculatorService buyNGet1FreeOfferCalculatorService;
@@ -93,7 +90,7 @@ public enum OfferDetail {
         @PostConstruct
         public void postConstruct() {
             for( OfferDetail offerDetail : EnumSet.allOf(OfferDetail.class)) {
-                offerDetail.setMultiPricedPriceOfferCalculator(multiPricedPriceOfferCalculator);
+                offerDetail.setMultiPricedPriceOfferCalculator(multiPricedPriceOfferCalculatorService);
                 offerDetail.setBuyNGet1FreeOfferCalculatorService(buyNGet1FreeOfferCalculatorService);
                 offerDetail.setMealDealOfferCalculatorService(mealDealOfferCalculatorService);
             }

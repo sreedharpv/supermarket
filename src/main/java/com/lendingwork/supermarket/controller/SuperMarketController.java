@@ -29,14 +29,14 @@ public class SuperMarketController extends AbstractSuperMarketController {
 
     /**
      * Method to calculate price for the selected SKUs
-     * @param itemsStr
+     * @param checkOutItemsStr
      * @return
      */
     @GetMapping(value = CALCULATE_PRICE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> calculatePrice(@RequestParam("items") String itemsStr) throws ApplicationException {
+    public ResponseEntity<Integer> calculatePrice(@RequestParam("items") String checkOutItemsStr) throws ApplicationException {
         LOG.info("Start calculatePrice API ");
         //List<String> items = Arrays.asList(itemsStr.split(","));
-        return ResponseEntity.ok(service.calculatePrice(Arrays.asList(itemsStr.split(","))));
+        return ResponseEntity.ok(service.calculatePrice(Arrays.asList(checkOutItemsStr.split(","))));
     }
 
 }
