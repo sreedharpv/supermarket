@@ -20,10 +20,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * LoadItemsService loads the CSV file and split the SKU Items, prices and offers
- */
-
 @Service
 public class LoadItemsServiceImpl implements LoadItemsService {
 
@@ -35,16 +31,39 @@ public class LoadItemsServiceImpl implements LoadItemsService {
     private static final String PRICE_FILE_NAME = "classpath:item-prices.csv";
     private static final String CSV_FILE_SEPARATOR = ",";
 
-    /**
-     * This method loads the CSV file and generate the Map with Item as key and Item Information as Value
-     * @return Map<String, ItemInfo>
+    /*
+     * This method loads the CSV file with Item, price and Offer details
      */
 
     @Override
     public Map<String, ItemInfo> loadPrices() {
-        Map<String, ItemInfo> itemToItemInfo = new HashMap<>();
 
+        Resource resource = resourceLoader.getResource(PRICE_FILE_NAME);
+        BufferedReader br = null;
+        List<ItemInfo> itemsPriceList = new ArrayList<ItemInfo>();
+        Map<String, ItemInfo> itemToItemInfo = new HashMap<>();
+        try{
+            LOG.info("Loading the SKUs data file");
+            br = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+            itemsPriceList = br.lines().skip(1).map(mapToItem).collect(Collectors.toList());
+            br.close();
+        } catch (IOException e) {
+            LOG.error("Error while loading the data file", e.getMessage());
+            e.printStackTrace();
+        }
+        for(ItemInfo itemInfo : itemsPriceList) {
+            itemToItemInfo.put(itemInfo.getItem(),itemInfo);
+        }
         return itemToItemInfo;
     }
 
+    private Function<String, ItemInfo> mapToItem = (line) -> {
+
+        String[] positionArr = line.split(CSV_FILE_SEPARATOR);// a CSV has comma separated lines
+        ItemInfo itemInfo = new ItemInfo();
+        itemInfo.setItem(positionArr[0]);
+        itemInfo.setUnitPrice(Integer.parseInt(positionArr[1]));
+        itemInfo.setOffer(positionArr[2]);
+        return itemInfo;
+    };
 }
