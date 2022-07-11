@@ -71,10 +71,23 @@ public class SuperMarketITTest {
     }
 
     @Test
-    public void calculateAmount_WhenBuy3Get1FreeOffer() throws Exception {
+    public void calculateAmount_When_Buy3Get1FreeOffer() throws Exception {
 
         //When
         MockHttpServletResponse mockResponse = mockMvc.perform(MockMvcRequestBuilders.get("/calculate-price?items=C,C,C,C")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn().getResponse();
+        //then
+        assertThat(mockResponse.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(mockResponse.getContentAsString()).contains("75");
+    }
+
+    @Test
+    public void calculateAmount_When_Buy3Get1FreeOffer_only3() throws Exception {
+
+        //When
+        MockHttpServletResponse mockResponse = mockMvc.perform(MockMvcRequestBuilders.get("/calculate-price?items=C,C,C")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn().getResponse();
@@ -158,7 +171,6 @@ public class SuperMarketITTest {
                 .andReturn().getResponse();
         //then
         assertThat(mockResponse.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(mockResponse.getContentAsString()).contains("860");
+        assertThat(mockResponse.getContentAsString()).contains("835");
     }
-    
 }
