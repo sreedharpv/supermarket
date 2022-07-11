@@ -74,7 +74,7 @@ public class SuperMarketITTest {
     public void calculateAmount_WhenBuy3Get1FreeOffer() throws Exception {
 
         //When
-        MockHttpServletResponse mockResponse = mockMvc.perform(MockMvcRequestBuilders.get("/calculate-price?items=C,C,C")
+        MockHttpServletResponse mockResponse = mockMvc.perform(MockMvcRequestBuilders.get("/calculate-price?items=C,C,C,C")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn().getResponse();
@@ -84,7 +84,7 @@ public class SuperMarketITTest {
     }
 
     @Test
-    public void calculateAmount_WhenMultiBuyOffer() throws Exception {
+    public void calculateAmount_When_OnlyMultiBuyOffer() throws Exception {
 
         //When
         MockHttpServletResponse mockResponse = mockMvc.perform(MockMvcRequestBuilders.get("/calculate-price?items=D,E")
@@ -110,7 +110,7 @@ public class SuperMarketITTest {
     }
 
     @Test
-    public void calculateAmount_WhenMultiBuyOffer_2for1_Offer() throws Exception {
+    public void calculateAmount_When_MultiBuyOffer_And_2for1_Offer() throws Exception {
 
         //When
         MockHttpServletResponse mockResponse = mockMvc.perform(MockMvcRequestBuilders.get("/calculate-price?items=D,E,B,B")
@@ -148,5 +148,17 @@ public class SuperMarketITTest {
         assertThat(mockResponse.getContentAsString()).contains("775");
     }
 
+    @Test
+    public void calculateAmount_DisOrder() throws Exception {
 
+        //When
+        MockHttpServletResponse mockResponse = mockMvc.perform(MockMvcRequestBuilders.get("/calculate-price?items=B,A,D,C,E,C,C,A,C,E,B,B")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn().getResponse();
+        //then
+        assertThat(mockResponse.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(mockResponse.getContentAsString()).contains("860");
+    }
+    
 }
