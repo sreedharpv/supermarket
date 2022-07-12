@@ -2,6 +2,7 @@ package com.lendingwork.supermarket.service.impl;
 
 import com.lendingwork.supermarket.domain.ItemInfo;
 import com.lendingwork.supermarket.domain.ItemPriceProcessor;
+import com.lendingwork.supermarket.helper.OfferProcessHelper;
 import com.lendingwork.supermarket.service.BuyNGet1FreeOfferCalculatorService;
 import org.springframework.stereotype.Service;
 
