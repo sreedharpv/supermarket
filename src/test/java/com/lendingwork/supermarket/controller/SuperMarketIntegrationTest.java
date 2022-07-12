@@ -50,6 +50,18 @@ public class SuperMarketIntegrationTest {
     }
 
     @Test
+    public void calculateAmountTest_Fail() throws Exception {
+
+        //When
+        MockHttpServletResponse mockResponse = mockMvc.perform(MockMvcRequestBuilders.get("/calculate-price?items=")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn().getResponse();
+        //then
+        assertThat(mockResponse.getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
     public void calculateAmount_WhenNoOffer() throws Exception {
 
         //When

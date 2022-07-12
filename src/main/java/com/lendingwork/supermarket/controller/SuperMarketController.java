@@ -5,8 +5,10 @@ import com.lendingwork.supermarket.service.SuperMarketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +37,9 @@ public class SuperMarketController extends AbstractSuperMarketController {
     @GetMapping(value = CALCULATE_PRICE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> calculatePrice(@RequestParam("items") String checkOutItemsStr) throws ApplicationException {
         LOG.info("Start calculatePrice API ");
-        //List<String> items = Arrays.asList(itemsStr.split(","));
+        if(isEmptyString.apply(checkOutItemsStr)) {
+            throw new ApplicationException(HttpStatus.BAD_REQUEST.value(),ITEMS_VALIDATION_MESSAGE);
+        }
         return ResponseEntity.ok(service.calculatePrice(Arrays.asList(checkOutItemsStr.split(","))));
     }
 
